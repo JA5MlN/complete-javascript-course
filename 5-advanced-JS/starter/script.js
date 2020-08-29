@@ -1,3 +1,4 @@
+
 //everything is an object (almost)
 
 //Primitives and Objects
@@ -16,7 +17,7 @@
 //every object we make is inherited from an Object Protoype
 //this is the prototype chain. The end of the chain is null
 
-//Every JS object has a proptype property, which akes inheritance possible in JS
+//Every JS object has a proptype property, which makes inheritance possible in JS
 //The prototype property of an object is where we put methods and properties that we want other objects to inherit
 //The constructor's prototype property is not the prototype of the Constructor itself, it's the prototype of ALL instances that are created through it.
 //When a certain method or property is called the search starts in the object itself, and if it cannot be found, the search moves on the the objects prototype. 
@@ -246,14 +247,245 @@ function interviewQuestion(job) {
 	}
 }
 
-var teacherQuestion = interviewQuestion('teacher');
-teacherQuestion('Pickle');
+
+var teacherQuestion =
+interviewQuestion('teacher'); //storing the returned function in a variable
+
+teacherQuestion('Mavis'); //calling the variable
 
 var designerQuestion = interviewQuestion('designer');
-
 designerQuestion('David');
 designerQuestion('Minnie');
 designerQuestion('Puddles');
 designerQuestion('Killer');
 
-interviewQuestion('teacher')('Billy');
+interviewQuestion('teacher')('Billy'); //we can even do it this way
+
+//Immediately invoked function expressions (IIFE)
+
+/*function game() {
+	var score = Math.random * 10;
+	console.log(score >= 5);
+}
+game();*/
+
+(function () {
+	var score = Math.random * 10;
+	console.log(score >= 5);
+})();
+
+//JavaScript knows that anything in parenthesis cannot be a statement
+
+//console.log(score); Here we have created data provacy, because you cannot access the score variable from the outside
+
+
+(function (goodLuck) {
+	var score = Math.random * 10;
+	console.log(score >= 5 - goodLuck);
+})(5);
+
+
+//Closures
+
+function retirement(retirementAge) {
+	var a = ' years left until retirement.';
+	return function(yearOfBirth) {
+		var age = 2016 - yearOfBirth;
+		console.log((retirementAge - age) + a);
+	}
+}
+
+var retirementUS = 
+retirement(66);
+retirementUS(1978);
+var retirementGermany = 
+retirement(65);
+var retirementIceland = 
+retirement(67);
+
+//retirement(66)(1978);
+
+//an inner function always has acces to the variables and parameters of its outer function, even after the outer function has returned.
+
+retirementGermany(1978);
+retirementUS(1978);
+retirementIceland(1978);
+
+
+
+function interviewQuestion(job) {
+	return function(name) {
+			if (job === 'teacher') {
+			console.log(name + ', do you like Kandinsky?');
+		} else if (job === 'designer') {
+			console.log(name + ', do you give detention?');
+		} else {
+			console.log(name + ', what do you do?');
+		}
+	}
+}
+
+interviewQuestion('teacher')('John');
+
+//Bind, Call and Apply
+
+var harry = {
+	name: 'Harry',
+	age: 40,
+	job: 'barrister',
+	presentation: function(style, timeOfDay) {
+		if (style === 'formal') {
+			console.log('Good ' + timeOfDay 
+				+ ' ladies and gentlemen! I\'m ' 
+				+ this.name + ' and I\'m ' 
+				+ this.age + ' years old and I\'m a ' 
+				+ this.job + '.');
+		} else if (style === 'friendly') {
+			console.log('Hi! How are you? I\'m ' 
+			+ this.name + ' and I\'m ' + 
+			this.age + ' years old and I\'m a ' + 
+			this.job + '. Hope you have a great ' + 
+			timeOfDay + '.');			
+		}
+	}
+};
+var emily = {
+	name: 'Emily',
+	age: 20,
+	job: 'boxer'
+};
+
+harry.presentation('formal', 'morning');
+
+harry.presentation.call(emily, 'friendly', 'afternoon'); //this is called method borrowing
+
+//the call method allows us to change the 'this' variable
+
+//the apply method accepts the arguments as an array so
+
+//For exxample, it would look like: harry.presentation.apply(emily, ['friendly', 'afternoon']);
+
+//Bind generates a copy of a function
+
+var harryFriendly = harry.presentation.bind(harry, 'friendly');
+
+harryFriendly('afternoon');
+harryFriendly('night');
+
+//this is called carrying
+
+var emilyFormal = harry.presentation.bind(emily, 'formal');
+
+emilyFormal('day');
+
+
+//bind allows us to copy a function with a preset argument
+
+var years = [1980, 1990, 2020, 2000, 1970];
+
+function arrayCalc(arr, fn) {
+	var arrRes = [];
+	for (var i = 0; i < arr.length; i++) {
+		arrRes.push(fn(arr[i]));
+	} 
+	return arrRes;
+}
+
+function calcAge(el) { //el for element
+	return 2020 - el;
+}
+
+var ages = arrayCalc(years, calcAge);//we are not calling the function here we are passing it through to be called back later
+console.log(ages);
+
+
+function isFullAge(el) {
+	return el >= 18;
+}
+var ages = arrayCalc(years, calcAge);
+var fullJapan = arrayCalc(ages, isFullAge.bind(this, 20));
+
+
+console.log(ages);
+console.log(fullJapan);
+
+//Toolbox FULL!!
+//Coding Challenge - Build a fun quiz game in the console! 6.30 start
+
+
+// 1. build a function constructor called Question to describe a Question. 
+//A question should include: the question, the answers from which someone can choose, and correct answer (number)
+
+/*var Question = function(question, options, answer) {
+	this.question = question;
+	this.options = options;
+	this.answer = answer;
+	this.display = function(question) {
+		console.log(this.question);
+		console.log(1 + '. ' + options[0]);
+		console.log(2 + '. ' + options[1]);
+		console.log(3 + '. ' + options[2]);
+	}
+}*/
+
+(function() {
+
+console.log('Do the Dean Quiz!');
+
+var Question = function(question, options, answer, display) {
+	this.question = question;
+	this.options = options;
+	this.answer = answer;
+	this.display = function() {
+		var x = 1;
+		console.log(this.question);
+		for (var i = 0; i < this.options.length; i++) {
+			console.log(x++ + '. ' + this.options[i]);
+		};
+	}
+}
+
+//2. Create a couple of questions using the constructor
+
+var questionOne = new Question('What is Dean\'s favourite food?', ['donuts', 'peanut butter and spinach milkshakes', 'chicken squares', 'pizza'], '3');
+var questionTwo = new Question('What should worms never eat?', ['onions', 'lemons', 'potatoes', 'all of the above'], '4');
+var questionThree = new Question('How much does Jasmin love you?', ['lots and lots', 'a bit', 'not much'], '1');
+var questionFour = new Question('What colour are Dean\'s eyes?', ['blue', 'grey', 'brown'], '2');
+var questionFive = new Question('What colour is our flat?', ['white', 'yellow', 'blue'], '2');
+
+//console.log(questionThree.answer);
+//3. Store them all inside an array
+
+var quiz = [questionOne, questionTwo, questionThree, questionFour, questionFive];
+
+//Select a random question and log it on the console, together with the possible answers. 
+//(Write a method for the question objects for this task.)
+var score = 0;
+
+nextQuestion = function() {
+	var current = quiz[Math.floor(Math.random() * 5)]; 
+	current.display();
+	var enterAnswer = prompt('Please select the correct answer (just type the number)'); 
+	if (enterAnswer === current.answer) {
+		score = score + 1;
+		console.log('Correct answer!');
+		console.log('Your current score is ' + score + '.');
+		console.log('---------------------------');
+		nextQuestion();
+	} else if (enterAnswer == 'exit') {
+		console.log('Thanks for playing! Your final score was ' + score + '.');
+	} else {
+		console.log('Sorry, that is not the right answer. Try again');
+		console.log('Your current score is ' + score + '.');
+		console.log('--------------------------------------');
+		nextQuestion();
+	} 
+}
+
+
+
+nextQuestion();
+})();
+//5. Use the prompt function to ask the user for the correct answer. 
+
+//parseInt() makes a strng into a number

@@ -1,0 +1,136 @@
+------------------------------------
+1. PROJECT PLANNING AND ARCHITECTURE
+
+Architecture - Planning the app
+
+Make a 'To do' list:
+
+add event handler
+get input values
+add the new item to our data structure
+add new item to the user interface
+calclate budget
+update the user interface
+
+Structuring our code - Modules
+
+modules are important for:
+-organisation and clarity
+-privacy and public facing work
+
+1. Module - User interface
+ 
+Get input values
+Add new item to UI
+Update UI
+
+2. Module - Data
+
+Add new item to data structure
+Calculate budget
+
+3. Module - Contoller
+
+Add event handler
+
+---------------------
+2.BUILD REAL PROJECTS
+
+a. how to use the module pattern
+b. private and public data, encapsulation and separtion of concerns
+
+API public interface
+ What is the module pattern
+
+ to make the mode pattern put the variable into a bracketed fuction:
+
+ var module = (function() {
+
+ })();
+
+ ----------------------
+ 3. SETTING UP FIRST EVENT LISTENER
+
+ 	document.addEventListener('keypress', function(event) {
+
+		console.log(event);
+		
+	});
+
+ keycode property that you can find when you console.log the keystrke is 13 for Enter
+
+We can use the keycode to specify which button is pressed
+
+	document.addEventListener('keypress', function(event) {
+
+		if (event.keyCode === 13 || event.which === 13) {
+			console.log('ENTER was pressed.');
+		}
+
+		adding 'which' is an older format
+
+--------------------------------------
+4. READING INPUT DATA
+
+
+
+
+------------------------------------
+5. CREATING AN INITIALISING STRUCTURE
+
+
+----------------------------------
+6. CREATING FUNCTION CONSTRUCTORS
+
+----------------
+7. ADDING A NEW ITEM
+avoiding conflicts
+
+			data.allitems[type].push(newItem);
+
+			object[] you can select the array property
+
+-----------------------
+8. ADDING A NEW ITEM TO THE UI
+
+%id% added placeholder text with percentage so easier to find and less likely to accidentally make a mistake
+
+document.querySelector(element).insertAdjacentHTML('beforeend', newHTML);
+
+insert into html either beforeend, beforebegin afterbegin, afterend
+
+------------------------
+9. Clearing input fields
+
+a. clear html fields
+
+
+b. use querySelectorAll
+
+
+	fields = document.querySelectorAll(domstrings.inputDescription + ', ' + DOMstrings.inputValue); write it like a string
+
+c. convert a list to an array
+d. looping arrays - for each
+
+
+clearFields: function() {
+			var fields, fieldsArr;
+			
+			fields = document.querySelectorAll(DOMstrings.inputDescription + ', ' + DOMstrings.inputValue);
+
+			fieldsArr = Array.prototype.slice.call(fields);
+
+			fieldsArr.forEach(function(current, i, array) {
+				current.value = "";
+			});
+
+			fieldsArr[0].focus();
+		},
+
+		getDOMstrings: function() {
+			return DOMstrings;
+		}
+	};
+
+	this was wild shit. truly.
